@@ -1,18 +1,18 @@
 module Rack
   #
   # Rack Middleware for extracting information from the request params and cookies.
-  # It populates +env['affiliate.tag']+, # +env['affiliate.from']+ and
-  # +env['affiliate.time'] if it detects a request came from an affiliated link
+  # It populates +env['source.tag']+, # +env['source.from']+ and
+  # +env['source.time'] if it detects a request came from an sourced link
   #
-  class Affiliates
-    COOKIE_TAG = "aff_tag"
-    COOKIE_FROM = "aff_from"
-    COOKIE_TIME = "aff_time"
-    COOKIE_EXTRA_VARS = "aff_extra"
+  class Sources
+    COOKIE_TAG = "source_tag"
+    COOKIE_FROM = "source_from"
+    COOKIE_TIME = "source_time"
+    COOKIE_EXTRA_VARS = "source_extra"
 
     def initialize(app, opts = {})
       @app = app
-      @param = opts[:param] || "ref"
+      @param = opts[:param] || "source"
       @cookie_ttl = opts[:ttl] || 60*60*24*30  # 30 days
       @cookie_domain = opts[:domain] || nil
       @allow_overwrite = opts[:overwrite].nil? ? true : opts[:overwrite]
@@ -41,10 +41,10 @@ module Rack
       end
 
       if tag
-        env["affiliate.tag"] = tag
-        env['affiliate.from'] = from
-        env['affiliate.time'] = time
-        env['affiliate.extras'] = extras
+        env["source.tag"] = tag
+        env['source.from'] = from
+        env['source.time'] = time
+        env['source.extras'] = extras
       end
 
       status, headers, body = @app.call(env)
@@ -56,7 +56,7 @@ module Rack
       [status, headers, body]
     end
 
-    def affiliate_info(req)
+    def source_info(req)
       params_info(req) || cookie_info(req)
     end
 

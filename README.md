@@ -1,19 +1,18 @@
-Rack::Affiliates
+Rack::Sources
 ================
 
-Rack::Affiliates is a rack middleware that extracts information about the referrals came from an affiliated site. Specifically, it looks up for specific parameter (<code>ref</code> by default) in the request. If found, it persists affiliate tag, referring url and time in a cookie for later use.
+Rack::Sources is a rack middleware that extracts information about an external source. Specifically, it looks up for specific parameter (<code>source</code> by default) in the request. If found, it persists source tag, referring url and time in a cookie for later use.
 
 Common Scenario
 ---------------
 
-Affiliate links tracking is very common task if you want to promote your online business. This middleware helps you to do that.
+Original source tracking is used to track referral from an external source using a specifically generated link. This middleware helps you to do that.
 
-1. You associate an affiliate tag (for eg. <code>ABC123</code>) with your partner.
-2. The affiliate promotes your business at http://partner.org by linking to your site with like <code>http://yoursite.org?ref=ABC123</code>.
+1. You associate an source tag (for eg. <code>LinkedIn</code>) and add it to public URLs.
+2. The public url is posted on external sites like <code>http://yoursite.org?source=LinkedIn</code>.
 3. A user clicks through the link and lands on your site.
-4. Rack::Affiliates middleware finds <code>ref</code> parameter in the request, extracts affiliate tag and saves it in a cookie
+4. Rack::Sources middleware finds <code>source</code> parameter in the request, extracts source tag and saves it in a cookie
 5. User signs up (now or later) and you mark it as a referral from your partner
-6. PROFIT!
 
 Installation
 ------------
@@ -21,11 +20,11 @@ Works with Rails version **> 2** (including Rails 5).
 
 Include the gem in your Gemfile:
 
-    gem 'rack-affiliates'
+    gem 'rack-sources'
     
 or install it:
 
-    gem install rack-affiliates
+    gem install rack-sources
 
 Rails Example Usage
 ---------------------
@@ -35,14 +34,14 @@ Add the middleware to your application stack:
     # Rails 3+ App - in config/application.rb
     class Application < Rails::Application
       ...
-      config.middleware.use Rack::Affiliates
+      config.middleware.use Rack::Sources
       ...
     end
     
     # Rails 2 App - in config/environment.rb
     Rails::Initializer.run do |config|
       ...
-      config.middleware.use "Rack::Affiliates"
+      config.middleware.use "Rack::Sources"
       ...
     end
 
@@ -50,8 +49,8 @@ Now you can check any request to see who came to your site via an affiliated lin
 
     class ExampleController < ApplicationController
       def index
-        str = if request.env['affiliate.tag'] && affiliate = User.find_by_affiliate_tag(request.env['affiliate.tag'])
-          "Halo, referral! You've been referred here by #{affiliate.name} from #{request.env['affiliate.from']} @ #{Time.at(env['affiliate.time'])}"
+        str = if request.env['source.tag'] && source = Source.find_by_source_tag(request.env['source.tag'])
+          "Halo, referral! You've been referred here by #{source.name} from #{request.env['source.from']} @ #{Time.at(env['source.time'])}"
         else
           "We're glad you found us on your own!"
         end
@@ -64,13 +63,13 @@ Now you can check any request to see who came to your site via an affiliated lin
 Customization
 -------------
 
-You can customize parameter name by providing <code>:param</code> option (default is <code>ref</code>).
+You can customize parameter name by providing <code>:param</code> option (default is <code>source</code>).
 By default cookie is set for 30 days, you can extend time to live with <code>:ttl</code> option (default is 30 days). 
 
     #Rails 3+ in config/application.rb
     class Application < Rails::Application
       ...
-      config.middleware.use Rack::Affiliates, {:param => 'aff_id', :ttl => 3.months}
+      config.middleware.use Rack::Sources, {:param => 'src_id', :ttl => 3.months}
       ...
     end
 
@@ -79,7 +78,7 @@ The <code>:domain</code> option allows to customize cookie domain.
     #Rails 3+ in config/application.rb
     class Application < Rails::Application
       ...
-      config.middleware.use Rack::Affiliates, :domain => '.example.org'
+      config.middleware.use Rack::Sources, :domain => '.example.org'
       ...
     end
 
@@ -88,7 +87,7 @@ The <code>:path</code> option allows to hardcode the cookie path allowing you to
     #Rails 3+ in config/application.rb
     class Application < Rails::Application
       ...
-      config.middleware.use Rack::Affiliates, { :path => '/' }
+      config.middleware.use Rack::Sources, { :path => '/' }
       ...
     end
 
@@ -101,13 +100,13 @@ If you want to capture more attributes from the query string whenever it comes f
     #Rails 3+ in config/application.rb
     class Application < Rails::Application
       ...
-      config.middleware.use Rack::Affiliates, { :extra_params => [:great_query_parameter] }
+      config.middleware.use Rack::Sources, { :extra_params => [:great_query_parameter] }
       ...
     end
 
-These will be availble through <code>env['affiliate.extras']</code> as a hash with the same keys.
+These will be availble through <code>env['source.extras']</code> as a hash with the same keys.
 
 Credits
 =======
 
-Thanks goes to Rack::Referrals (https://github.com/deviantech/rack-referrals) for the inspiration.
+Cloned from rack-affiliated (https://github.com/alexlevin/rack-affiliates) to allow us to use both middlewares in the same application

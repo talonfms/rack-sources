@@ -12,14 +12,13 @@ end
 require "simplecov"
 SimpleCov.start
 
-require "minitest/spec"
 require "minitest/autorun"
 require "rack/test"
 require 'timecop'
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
-require 'rack-affiliates'
+require 'rack-sources'
 
 class MiniTest::Unit::TestCase
   include Rack::Test::Methods
@@ -28,8 +27,7 @@ class MiniTest::Unit::TestCase
     hello_world_app = lambda do |env|
       [200, {}, "Hello World"]
     end
-    
-    @app = Rack::Affiliates.new(hello_world_app)
+
+    @app = Rack::Sources.new(hello_world_app)
   end
 end
-

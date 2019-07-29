@@ -14,11 +14,11 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "rack-affiliates"
-  gem.homepage = "http://github.com/alexlevin/rack-affiliates"
+  gem.name = "rack-sources"
+  gem.homepage = "http://github.com/talonfms/rack-sources"
   gem.license = "MIT"
   gem.summary = %Q{Tracks referrals came via an affiliated links.}
-  gem.description = %Q{If the user clicked through from an affiliated site, this middleware will track affiliate tag, referring url and time.} 
+  gem.description = %Q{If the user clicked through from an affiliated site, this middleware will track affiliate tag, referring url and time.}
   gem.email = "experiment17@gmail.com"
   gem.authors = ["Alex Levin"]
 end
