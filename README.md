@@ -45,7 +45,7 @@ Add the middleware to your application stack:
       ...
     end
 
-Now you can check any request to see who came to your site via an affiliated link and use this information in your application. Affiliate tag is saved in the cookie and will come into play if user returns to your site later.
+Now you can check any request to see who came to your site via an source link and use this information in your application. Source tag is saved in the cookie and will come into play if user returns to your site later.
 
     class ExampleController < ApplicationController
       def index
@@ -82,7 +82,7 @@ The <code>:domain</code> option allows to customize cookie domain.
       ...
     end
 
-The <code>:path</code> option allows to hardcode the cookie path allowing you to record affiliate links at any URL on your site.
+The <code>:path</code> option allows to hardcode the cookie path allowing you to record source links at any URL on your site.
 
     #Rails 3+ in config/application.rb
     class Application < Rails::Application
@@ -93,9 +93,9 @@ The <code>:path</code> option allows to hardcode the cookie path allowing you to
 
 Middleware will set cookie on <code>.example.org</code> so it's accessible on <code>www.example.org</code>, <code>app.example.org</code> etc.
 
-The <code>:overwrite</code> option allows to set whether to overwrite the existing affiliate tag previously stored in cookies. By default it is set to `true`.
+The <code>:overwrite</code> option allows to set whether to overwrite the existing source tag previously stored in cookies. By default it is set to `true`.
 
-If you want to capture more attributes from the query string whenever it comes from an affiliate you can define those with the <code>extra_params</code> value.
+If you want to capture more attributes from the query string whenever it comes from an source you can define those with the <code>extra_params</code> value.
 
     #Rails 3+ in config/application.rb
     class Application < Rails::Application
@@ -109,4 +109,4 @@ These will be availble through <code>env['source.extras']</code> as a hash with 
 Credits
 =======
 
-Cloned from rack-affiliated (https://github.com/alexlevin/rack-affiliates) to allow us to use both middlewares in the same application
+Cloned from rack-affiliates (https://github.com/alexlevin/rack-affiliates) to allow us to use both middlewares in the same application
